@@ -14,6 +14,8 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
+  const [showFloatBtn, setShowFloatBtn] = useState(false);
+  const [forceAnalyzeOverride, setForceAnalyzeOverride] = useState(false);
   const [zoom, setZoom] = useState(100);
   const [usageCount, setUsageCount] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -53,6 +55,9 @@ const App = () => {
 
   // Show popup when text is selected or forceAnalyze changes
   useEffect(() => {
+    setShowFloatBtn(false);
+    setForceAnalyzeOverride(false);
+
     if (!selectedText) return;
 
     if (forceAnalyze) {
@@ -65,8 +70,12 @@ const App = () => {
     const checkCacheQuietly = async () => {
       try {
         const data = await analyzeText(selectedText, false);
-        if (!cancelled && !data.notInCache) {
-          setShowPopup(true);
+        if (!cancelled) {
+          if (!data.notInCache) {
+            setShowPopup(true);
+          } else if (window.innerWidth <= 768) {
+            setShowFloatBtn(true);
+          }
         }
       } catch (err) {
         console.error("Silent cache check failed:", err);
@@ -83,6 +92,8 @@ const App = () => {
     setCurrentPage(1);
     setTotalPages(0);
     setShowPopup(false);
+    setShowFloatBtn(false);
+    setForceAnalyzeOverride(false);
     setZoom(100);
     clearSelection();
   };
@@ -137,6 +148,8 @@ const App = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
+    setShowFloatBtn(false);
+    setForceAnalyzeOverride(false);
     clearSelection();
   };
 
@@ -241,11 +254,26 @@ const App = () => {
         </main>
       </div>
 
+      {showFloatBtn && selectedText && (
+        <button 
+          className="mobile-float-btn" 
+          style={{ left: position.x, top: Math.max(8, position.y - 64) }}
+          onClick={() => {
+            setShowFloatBtn(false);
+            setForceAnalyzeOverride(true);
+            setShowPopup(true);
+          }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>auto_awesome</span>
+          Analyze
+        </button>
+      )}
+
       {showPopup && selectedText && (
         <Popup
           selectedText={selectedText}
           position={position}
-          forceAnalyze={forceAnalyze}
+          forceAnalyze={forceAnalyze || forceAnalyzeOverride}
           onClose={handleClosePopup}
           onAnalysisSuccess={handleAnalysisSuccess}
         />

@@ -47,8 +47,7 @@ export const useSelection = (containerRef) => {
     };
 
     const handleInteraction = (e) => {
-      const isMobile = window.innerWidth <= 768;
-      processSelection(e, e.ctrlKey || e.metaKey || isMobile);
+      processSelection(e, e.ctrlKey || e.metaKey);
     };
 
     const handleKeyDown = (e) => {
