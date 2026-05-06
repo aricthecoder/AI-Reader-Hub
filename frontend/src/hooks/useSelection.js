@@ -46,8 +46,9 @@ export const useSelection = (containerRef) => {
       }, DEBOUNCE_MS);
     };
 
-    const handleMouseUp = (e) => {
-      processSelection(e, e.ctrlKey || e.metaKey);
+    const handleInteraction = (e) => {
+      const isMobile = window.innerWidth <= 768;
+      processSelection(e, e.ctrlKey || e.metaKey || isMobile);
     };
 
     const handleKeyDown = (e) => {
@@ -70,11 +71,15 @@ export const useSelection = (containerRef) => {
       }
     };
 
-    container.addEventListener('mouseup', handleMouseUp);
+    container.addEventListener('mouseup', handleInteraction);
+    container.addEventListener('touchend', handleInteraction);
+    document.addEventListener('selectionchange', handleInteraction);
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      container.removeEventListener('mouseup', handleMouseUp);
+      container.removeEventListener('mouseup', handleInteraction);
+      container.removeEventListener('touchend', handleInteraction);
+      document.removeEventListener('selectionchange', handleInteraction);
       document.removeEventListener('keydown', handleKeyDown);
       clearTimeout(debounceTimer.current);
     };
