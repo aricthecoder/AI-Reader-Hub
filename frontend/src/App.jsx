@@ -16,6 +16,7 @@ const App = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [zoom, setZoom] = useState(100);
   const [usageCount, setUsageCount] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const DAILY_LIMIT = 1500;
 
@@ -158,7 +159,7 @@ const App = () => {
           case '=':
           case '+':
             e.preventDefault();
-            setZoom((z) => Math.min(200, z + 25));
+            setZoom((z) => Math.min(300, z + 25));
             break;
           case '-':
           case '_':
@@ -183,8 +184,28 @@ const App = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev]);
 
+  // Pinch-to-Zoom Interceptor
+  useEffect(() => {
+    const handleWheel = (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        setZoom((z) => {
+          // Adjust zoom by a factor based on deltaY
+          // deltaY < 0 means pinch out (zoom in)
+          // deltaY > 0 means pinch in (zoom out)
+          const newZoom = z - e.deltaY * 0.5;
+          return Math.max(50, Math.min(300, newZoom));
+        });
+      }
+    };
+
+    // passive: false is required to preventDefault on wheel events
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    return () => document.removeEventListener('wheel', handleWheel);
+  }, []);
+
   return (
-    <>
+    <div className={`app-root ${!sidebarOpen ? 'sidebar-closed' : ''}`}>
       <Sidebar theme={theme} />
 
       <div className="app-wrapper">
@@ -197,6 +218,7 @@ const App = () => {
           onPageJump={handlePageJump}
           theme={theme}
           onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          onToggleSidebar={() => setSidebarOpen((s) => !s)}
           fileName={fileName}
           zoom={zoom}
           onZoomChange={handleZoomChange}
@@ -225,7 +247,7 @@ const App = () => {
           onAnalysisSuccess={handleAnalysisSuccess}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -5,7 +5,7 @@ const ZOOM_PRESETS = [50, 75, 100, 125, 150, 200];
 const Toolbar = ({
   onFileUpload, currentPage, totalPages,
   onPrev, onNext, onPageJump,
-  theme, onToggleTheme, fileName,
+  theme, onToggleTheme, onToggleSidebar, fileName,
   zoom, onZoomChange, usageCount, dailyLimit,
 }) => {
   const fileInputRef = useRef(null);
@@ -36,6 +36,9 @@ const Toolbar = ({
   return (
     <header className="toolbar">
       <div className="toolbar__left">
+        <button className="btn-icon" onClick={onToggleSidebar} title="Toggle Sidebar">
+          <span className="material-symbols-outlined">menu_open</span>
+        </button>
         {/* Page badge */}
         {totalPages > 0 && (
           <div className="toolbar__page-badge">
