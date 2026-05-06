@@ -131,12 +131,30 @@ h1, h2, h3 { font-family: 'Public Sans', sans-serif; }
   background: var(--bg-sidebar);
   color: var(--text-on-sidebar);
   border-right: 3px solid var(--border-color);
-  z-index: 100;
+  z-index: 1001; /* Must be above overlay */
   overflow-y: auto;
   transition: transform var(--transition);
 }
 
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  animation: fade-in var(--transition) forwards;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .sidebar__brand { margin-bottom: 48px; padding: 0 8px; }
+.sidebar__brand-header { display: flex; align-items: flex-start; justify-content: space-between; }
+.sidebar__close-btn { 
+  background: transparent; border: none; color: var(--text-on-sidebar); 
+  cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center;
+}
 .sidebar__brand-title {
   font-family: 'Public Sans', sans-serif;
   font-size: 32px; font-weight: 900;
@@ -635,6 +653,8 @@ h1, h2, h3 { font-family: 'Public Sans', sans-serif; }
 }
 
 /* ─── Responsive ────────────────────────────────────────────── */
+.hide-desktop { display: none; }
+
 @media (max-width: 1100px) {
   .hide-sm { display: none; }
   .toolbar { padding: 0 12px; }
@@ -643,10 +663,53 @@ h1, h2, h3 { font-family: 'Public Sans', sans-serif; }
 }
 
 @media (max-width: 768px) {
-  :root { --sidebar-w: 0px; --popup-width: 300px; --toolbar-h: 56px; }
-  .sidebar { display: none; }
-  .app-wrapper { margin-left: 0; }
-  .pdf-container { padding: 24px 8px; }
+  :root { --sidebar-w: 260px; --popup-width: 100%; --toolbar-h: 56px; }
+  
+  .sidebar { 
+    display: flex !important; /* Override any potential hide */
+    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+  }
+  
+  /* On mobile, app-wrapper always takes full width */
+  .app-wrapper { 
+    margin-left: 0 !important; 
+    width: 100% !important; 
+  }
+  
+  /* Disable app-wrapper transitions on mobile so it doesn't try to slide */
+  .app-root.sidebar-closed .app-wrapper {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .pdf-container { padding: 16px 8px; gap: 24px; }
   .toolbar { padding: 0 8px; }
   .toolbar__left, .toolbar__right { gap: 4px; }
+  
+  /* Bottom sheet popup */
+  .popup {
+    left: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    max-height: 85vh !important;
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    transform-origin: bottom center;
+    animation: popup-slide-up 0.2s ease-out forwards;
+  }
+  
+  @keyframes popup-slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  
+  .popup.closing {
+    animation: popup-slide-down 0.15s ease-in forwards;
+  }
+  
+  @keyframes popup-slide-down {
+    to { transform: translateY(100%); }
+  }
 }

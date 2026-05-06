@@ -84,7 +84,10 @@ const Toolbar = ({
         <div className="toolbar__divider" />
 
         {/* Quick AI + Upload */}
-        <button className="btn-text">Quick AI</button>
+        <button className="btn-text" title="Quick AI">
+          <span className="hide-sm">Quick AI</span>
+          <span className="material-symbols-outlined hide-desktop" style={{ fontSize: '20px' }}>auto_awesome</span>
+        </button>
 
         <label className="upload-label" htmlFor="toolbar-pdf-upload">
           UPLOAD <span className="hide-sm">PDF</span>

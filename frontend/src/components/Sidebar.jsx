@@ -1,11 +1,16 @@
-const Sidebar = ({ theme }) => {
+const Sidebar = ({ theme, onClose }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
-        <div className="sidebar__brand-title">
-          <span className="brand-primary">AI Reader</span>
-          <br />
-          <span className="brand-accent">Hub</span>
+        <div className="sidebar__brand-header">
+          <div className="sidebar__brand-title">
+            <span className="brand-primary">AI Reader</span>
+            <br />
+            <span className="brand-accent">Hub</span>
+          </div>
+          <button className="sidebar__close-btn hide-desktop" onClick={onClose} aria-label="Close Sidebar">
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
         <div className="sidebar__brand-sub">Premium Archive</div>
       </div>

@@ -206,7 +206,10 @@ const App = () => {
 
   return (
     <div className={`app-root ${!sidebarOpen ? 'sidebar-closed' : ''}`}>
-      <Sidebar theme={theme} />
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} aria-label="Close Sidebar" />
+      )}
+      <Sidebar theme={theme} onClose={() => setSidebarOpen(false)} />
 
       <div className="app-wrapper">
         <Toolbar

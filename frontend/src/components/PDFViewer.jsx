@@ -40,7 +40,8 @@ const PDFViewer = ({ file, currentPage, onTotalPages, onPageChange, containerRef
         // Compute fit-to-width scale
         const firstPage  = await pdf.getPage(1);
         const baseVP     = firstPage.getViewport({ scale: 1 });
-        const padded     = (wrapperRef.current?.clientWidth ?? 900) - 80;
+        const paddingOffset = window.innerWidth <= 768 ? 16 : 80;
+        const padded     = (wrapperRef.current?.clientWidth ?? 900) - paddingOffset;
         const baseScale  = Math.min(padded / baseVP.width, 2.5);
         baseScaleRef.current = baseScale;
 
