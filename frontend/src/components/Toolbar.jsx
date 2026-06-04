@@ -5,8 +5,9 @@ const ZOOM_PRESETS = [50, 75, 100, 125, 150, 200];
 const Toolbar = ({
   onFileUpload, currentPage, totalPages,
   onPrev, onNext, onPageJump,
-  theme, onToggleTheme, onToggleSidebar, fileName,
+  theme, onToggleTheme, fileName,
   zoom, onZoomChange, usageCount, dailyLimit,
+  onLogoClick,
 }) => {
   const fileInputRef = useRef(null);
 
@@ -36,28 +37,34 @@ const Toolbar = ({
   return (
     <header className="toolbar">
       <div className="toolbar__left">
-        <button className="btn-icon" onClick={onToggleSidebar} title="Toggle Sidebar">
-          <span className="material-symbols-outlined">menu_open</span>
-        </button>
-        {/* Page badge */}
+        <div className="toolbar__logo" onClick={onLogoClick} style={{ cursor: 'pointer' }} title="Go to Home">
+          <span className="logo-icon material-symbols-outlined">auto_stories</span>
+          <span className="logo-text">
+            Read<span className="logo-accent">AI</span>
+          </span>
+        </div>
+
         {totalPages > 0 && (
-          <div className="toolbar__page-badge">
-            <input
-              type="text"
-              defaultValue={currentPage}
-              key={currentPage}
-              onKeyDown={handlePageInput}
-              style={{
-                width: '24px', textAlign: 'center',
-                background: 'transparent', border: 'none',
-                color: 'inherit', fontFamily: 'inherit',
-                fontSize: 'inherit', fontWeight: 'inherit',
-                outline: 'none', padding: 0,
-              }}
-            />
-            <span style={{ margin: '0 2px' }}>/</span>
-            {totalPages}
-          </div>
+          <>
+            <div className="toolbar__vertical-divider" />
+            <div className="toolbar__page-badge">
+              <input
+                type="text"
+                defaultValue={currentPage}
+                key={currentPage}
+                onKeyDown={handlePageInput}
+                style={{
+                  width: '24px', textAlign: 'center',
+                  background: 'transparent', border: 'none',
+                  color: 'inherit', fontFamily: 'inherit',
+                  fontSize: 'inherit', fontWeight: 'inherit',
+                  outline: 'none', padding: 0,
+                }}
+              />
+              <span style={{ margin: '0 2px' }}>/</span>
+              {totalPages}
+            </div>
+          </>
         )}
       </div>
 
@@ -83,11 +90,7 @@ const Toolbar = ({
 
         <div className="toolbar__divider" />
 
-        {/* Quick AI + Upload */}
-        <button className="btn-text" title="Quick AI">
-          <span className="hide-sm">Quick AI</span>
-          <span className="material-symbols-outlined hide-desktop" style={{ fontSize: '20px' }}>auto_awesome</span>
-        </button>
+
 
         <label className="upload-label" htmlFor="toolbar-pdf-upload">
           UPLOAD <span className="hide-sm">PDF</span>

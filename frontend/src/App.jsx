@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import './index.css';
-import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
 import PDFViewer from './components/PDFViewer';
 import Popup from './components/Popup';
+import LandingPage from './components/LandingPage';
 import { useSelection } from './hooks/useSelection';
 import { analyzeText } from './services/api';
 
 const App = () => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [pdfFile, setPdfFile] = useState(null);
   const [fileName, setFileName] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +18,6 @@ const App = () => {
   const [forceAnalyzeOverride, setForceAnalyzeOverride] = useState(false);
   const [zoom, setZoom] = useState(100);
   const [usageCount, setUsageCount] = useState(0);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const DAILY_LIMIT = 1500;
 
@@ -89,6 +88,18 @@ const App = () => {
   const handleFileUpload = (file) => {
     setPdfFile(file);
     setFileName(file.name);
+    setCurrentPage(1);
+    setTotalPages(0);
+    setShowPopup(false);
+    setShowFloatBtn(false);
+    setForceAnalyzeOverride(false);
+    setZoom(100);
+    clearSelection();
+  };
+
+  const handleLogoClick = () => {
+    setPdfFile(null);
+    setFileName('');
     setCurrentPage(1);
     setTotalPages(0);
     setShowPopup(false);
@@ -218,15 +229,11 @@ const App = () => {
   }, []);
 
   return (
-    <div className={`app-root ${!sidebarOpen ? 'sidebar-closed' : ''}`}>
-      {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} aria-label="Close Sidebar" />
-      )}
-      <Sidebar theme={theme} onClose={() => setSidebarOpen(false)} />
-
+    <div className="app-root">
       <div className="app-wrapper">
         <Toolbar
           onFileUpload={handleFileUpload}
+          onLogoClick={handleLogoClick}
           currentPage={currentPage}
           totalPages={totalPages}
           onPrev={handlePrev}
@@ -234,7 +241,6 @@ const App = () => {
           onPageJump={handlePageJump}
           theme={theme}
           onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-          onToggleSidebar={() => setSidebarOpen((s) => !s)}
           fileName={fileName}
           zoom={zoom}
           onZoomChange={handleZoomChange}
@@ -243,14 +249,18 @@ const App = () => {
         />
 
         <main className="app-main">
-          <PDFViewer
-            file={pdfFile}
-            currentPage={currentPage}
-            onTotalPages={handleTotalPages}
-            onPageChange={handlePageChange}
-            containerRef={containerRef}
-            zoom={zoom}
-          />
+          {pdfFile ? (
+            <PDFViewer
+              file={pdfFile}
+              currentPage={currentPage}
+              onTotalPages={handleTotalPages}
+              onPageChange={handlePageChange}
+              containerRef={containerRef}
+              zoom={zoom}
+            />
+          ) : (
+            <LandingPage onFileUpload={handleFileUpload} />
+          )}
         </main>
       </div>
 

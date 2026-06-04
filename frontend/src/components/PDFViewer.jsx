@@ -126,27 +126,6 @@ const PDFViewer = ({ file, currentPage, onTotalPages, onPageChange, containerRef
         </div>
       )}
 
-      {/* ── Welcome state ── */}
-      {!file && !loading && (
-        <div className="pdf-empty">
-          <div className="pdf-empty__icon">📄</div>
-          <h2>Upload a PDF to Begin</h2>
-          <p>Select any PDF file and start reading smart. Highlight any word or sentence to get instant AI‑powered explanations.</p>
-          <div className="pdf-empty__steps">
-            {[
-              'Click "Upload PDF" in the toolbar',
-              'Select any word for meaning + Hinglish',
-              'Select a sentence for grammar analysis',
-              'Ask any question about selected text',
-            ].map((step, i) => (
-               <div className="pdf-empty__step" key={i}>
-                <div className="pdf-empty__step-num">{i + 1}</div>
-                <span>{step}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ── Pages ── */}
       {!loading && pages.map(({ pageNum, estimatedWidth, estimatedHeight }) => (
