@@ -33,7 +33,11 @@ const analyzeText = async (req, res) => {
     return res.json(result);
   } catch (err) {
     console.error('AI Analysis Error:', err);
-    if (err.message && err.message.includes('JSON')) {
+    const errMsg = err.message || '';
+    if (errMsg.includes('API key not valid') || errMsg.includes('API_KEY_INVALID')) {
+      return res.status(401).json({ error: 'Invalid Gemini API Key. Please update GEMINI_API_KEY in your backend/.env file.' });
+    }
+    if (errMsg.includes('JSON')) {
       return res.status(502).json({ error: 'AI returned an unexpected response. Please try again.' });
     }
     return res.status(500).json({ error: 'AI analysis failed. Please try again.' });
