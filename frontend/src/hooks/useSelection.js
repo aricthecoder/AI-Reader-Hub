@@ -46,12 +46,16 @@ export const useSelection = (containerRef) => {
       }, DEBOUNCE_MS);
     };
 
+    let isCtrlPressed = false;
+
     const handleInteraction = (e) => {
-      processSelection(e, e.ctrlKey || e.metaKey);
+      const isCtrl = !!(e.ctrlKey || e.metaKey || isCtrlPressed);
+      processSelection(e, isCtrl);
     };
 
     const handleKeyDown = (e) => {
       if (e.key === 'Control' || e.key === 'Meta') {
+        isCtrlPressed = true;
         const selection = window.getSelection();
         if (!selection || selection.rangeCount === 0) return;
 
@@ -70,16 +74,30 @@ export const useSelection = (containerRef) => {
       }
     };
 
+    const handleKeyUp = (e) => {
+      if (e.key === 'Control' || e.key === 'Meta') {
+        isCtrlPressed = false;
+      }
+    };
+
+    const handleBlur = () => {
+      isCtrlPressed = false;
+    };
+
     container.addEventListener('mouseup', handleInteraction);
     container.addEventListener('touchend', handleInteraction);
     document.addEventListener('selectionchange', handleInteraction);
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('blur', handleBlur);
 
     return () => {
       container.removeEventListener('mouseup', handleInteraction);
       container.removeEventListener('touchend', handleInteraction);
       document.removeEventListener('selectionchange', handleInteraction);
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('blur', handleBlur);
       clearTimeout(debounceTimer.current);
     };
   }, [containerRef, clearSelection]);
