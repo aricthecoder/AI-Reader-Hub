@@ -71,12 +71,16 @@ const Toolbar = ({
       <div className="toolbar__right">
         {/* Zoom & Theme */}
         <div className="toolbar__actions">
-          <button className="btn-icon" onClick={handleZoomOut} disabled={zoom <= ZOOM_PRESETS[0]} title="Zoom Out">
-            <span className="material-symbols-outlined">zoom_out</span>
-          </button>
-          <button className="btn-icon" onClick={handleZoomIn} disabled={zoom >= ZOOM_PRESETS[ZOOM_PRESETS.length - 1]} title="Zoom In">
-            <span className="material-symbols-outlined">zoom_in</span>
-          </button>
+          {fileName && (
+            <>
+              <button className="btn-icon" onClick={handleZoomOut} disabled={zoom <= ZOOM_PRESETS[0]} title="Zoom Out">
+                <span className="material-symbols-outlined">zoom_out</span>
+              </button>
+              <button className="btn-icon" onClick={handleZoomIn} disabled={zoom >= ZOOM_PRESETS[ZOOM_PRESETS.length - 1]} title="Zoom In">
+                <span className="material-symbols-outlined">zoom_in</span>
+              </button>
+            </>
+          )}
           <button
             className={`btn-icon ${theme === 'dark' ? 'btn-icon--active' : ''}`}
             onClick={onToggleTheme}
