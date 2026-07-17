@@ -1,11 +1,14 @@
 # Smart PDF Reader AI
 
-## 🚀 Running Locally
+A PDF reader that lets you select any word, sentence, or passage and instantly get AI-powered explanations — meanings, Hinglish translations, example sentences, and answers to custom questions — powered by Google's Gemini API.
 
+## 🌐 Live Demo
+[https://readai-v1.vercel.app/](https://readai-v1.vercel.app/)
+
+## 🚀 Running Locally
 ### Prerequisites
 - Node.js 18+
 - A Gemini API key (already configured in `backend/.env`)
-
 ### Backend
 ```bash
 cd backend
@@ -13,7 +16,6 @@ npm install
 npm start
 # Runs on http://localhost:3001
 ```
-
 ### Frontend
 ```bash
 cd frontend
@@ -21,13 +23,9 @@ npm install
 npm run dev
 # Runs on http://localhost:5173
 ```
-
 Open **http://localhost:5173** in your browser.
-
 ---
-
 ## ⌨️ Keyboard Shortcuts
-
 | Action | Shortcut |
 |---|---|
 | **Toggle Dark/Light Mode** | `Alt + T` |
@@ -35,11 +33,8 @@ Open **http://localhost:5173** in your browser.
 | **Zoom Out** | `Alt + -` |
 | **Next Page** | `Alt + Right Arrow` |
 | **Previous Page** | `Alt + Left Arrow` |
-
 ---
-
 ## 📁 Project Structure
-
 ```
 Smartbookreader/
 ├── backend/
@@ -67,38 +62,13 @@ Smartbookreader/
     │       └── api.js              # API calls + client cache
     └── .env                        # VITE_API_URL
 ```
-
 ---
-
-## 🚀 Deployment
-
-### Frontend → Vercel
-1. Push `frontend/` to a GitHub repo
-2. Go to [vercel.com](https://vercel.com) → New Project → import repo
-3. Set **Root Directory** to `frontend`
-4. Add environment variable: `VITE_API_URL=https://your-backend.onrender.com`
-5. Deploy
-
-### Backend → Render
-1. Push `backend/` to a GitHub repo (or same repo)
-2. Go to [render.com](https://render.com) → New Web Service
-3. Set **Root Directory** to `backend`
-4. Build command: `npm install`
-5. Start command: `node server.js`
-6. Add environment variable: `GEMINI_API_KEY=your_key`
-7. Deploy
-
----
-
 ## 🔑 API Reference
-
 ### POST /analyze
-
 **Word request:**
 ```json
 { "text": "ephemeral" }
 ```
-
 **Word response:**
 ```json
 {
@@ -108,12 +78,10 @@ Smartbookreader/
   "example_sentence": "..."
 }
 ```
-
 **Sentence request:**
 ```json
 { "text": "The quick brown fox jumps over the lazy dog." }
 ```
-
 **Question request:**
 ```json
 {
