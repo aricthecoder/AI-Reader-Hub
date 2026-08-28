@@ -1,0 +1,18 @@
+{
+  "appId": "com.readai.app",
+  "appName": "ReadAI",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0f0f0f",
+      "showSpinner": false
+    }
+  }
+}

@@ -52,6 +52,9 @@ const App = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  // Detect touch/mobile environment (Capacitor APK or mobile browser)
+  const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 900;
+
   // Show popup when text is selected or forceAnalyze changes
   useEffect(() => {
     setShowFloatBtn(false);
@@ -71,13 +74,23 @@ const App = () => {
         const data = await analyzeText(selectedText, false);
         if (!cancelled) {
           if (!data.notInCache) {
+            // In cache → open popup immediately
             setShowPopup(true);
-          } else if (window.innerWidth <= 768) {
-            setShowFloatBtn(true);
+          } else {
+            // Not in cache → show float button on mobile, nothing on desktop
+            // (desktop user must press Ctrl to trigger analysis)
+            if (isMobile) {
+              setShowFloatBtn(true);
+            }
           }
         }
       } catch (err) {
+        // On error (e.g. no network), still show float btn on mobile
+        // so user can at least try to analyze
         console.error("Silent cache check failed:", err);
+        if (!cancelled && isMobile) {
+          setShowFloatBtn(true);
+        }
       }
     };
     
@@ -267,7 +280,6 @@ const App = () => {
       {showFloatBtn && selectedText && (
         <button 
           className="mobile-float-btn" 
-          style={{ left: position.x, top: Math.max(8, position.y - 64) }}
           onClick={() => {
             setShowFloatBtn(false);
             setForceAnalyzeOverride(true);

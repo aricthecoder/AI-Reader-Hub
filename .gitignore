@@ -23,3 +23,7 @@ frontend/*.log
 .vscode/
 .idea/
 .DS_Store
+
+# Capacitor / Mobile (auto-generated, do not commit)
+frontend/android/
+frontend/ios/

@@ -166,7 +166,6 @@ const Popup = ({ selectedText, position, forceAnalyze, onClose, onAnalysisSucces
         left: currentPos.x,
         top: currentPos.y,
         maxHeight: `calc(100vh - ${currentPos.y + 16}px)`,
-        touchAction: 'none' // Prevent scrolling while dragging
       }}
       role="dialog"
       aria-label="AI Analysis Popup"

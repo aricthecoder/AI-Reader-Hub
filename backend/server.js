@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({
   origin: [
-    'http://localhost:5173', 
-    'http://localhost:3000', 
+    'http://localhost:5173',
+    'http://localhost:3000',
     /^https:\/\/.*\.vercel\.app$/ // Allows any Vercel deployment URL
   ],
   methods: ['GET', 'POST'],
@@ -29,3 +29,6 @@ app.use((err, _req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`Smart PDF Reader backend running on port ${PORT}`);
 });
+
+// Export for Vercel serverless
+module.exports = app;
